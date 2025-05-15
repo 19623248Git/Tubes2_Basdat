@@ -53,31 +53,43 @@ def sql_string(s):
     s_escaped = str(s).replace("'", "''")
     return f"'{s_escaped}'"
 
-for i in supporter_ids:
+print(f"INSERT INTO Supporter (id_supporter, nama, email, alamat, tanggal_bergabung) VALUES")
+for idx, i in enumerate(supporter_ids):
     nama = fake.name()
     email = fake.email()
     alamat = fake.address().replace('\n', ', ')
     tanggal_bergabung = fake.date_between(start_date='-3y', end_date='-1y')
-    print(f"INSERT INTO Supporter (id_supporter, nama, email, alamat, tanggal_bergabung) VALUES ({i}, {sql_string(nama)}, {sql_string(email)}, {sql_string(alamat)}, {sql_date(tanggal_bergabung)});")
+    if idx == len(supporter_ids) - 1:
+        print(f"  ({i}, {sql_string(nama)}, {sql_string(email)}, {sql_string(alamat)}, {sql_date(tanggal_bergabung)});")
+        break
+    print(f"  ({i}, {sql_string(nama)}, {sql_string(email)}, {sql_string(alamat)}, {sql_date(tanggal_bergabung)}),")
 
+
+print(f"INSERT INTO Creator (id_creator, nama, email, bidang_kreasi, deskripsi, tanggal_bergabung) VALUES ")
 bidang_kreasi_options = ['Seni Digital', 'Musik Akustik', 'Podcast Komedi', 'Tutorial Masak', 'Review Teknologi', 'Animasi Pendek']
-for i in creator_ids:
+for idx, i in enumerate(creator_ids):
     nama = fake.name()
     email = fake.unique.email()
     bidang_kreasi = random.choice(bidang_kreasi_options)
     deskripsi = fake.paragraph(nb_sentences=3)
     tanggal_bergabung = fake.date_between(start_date='-4y', end_date='-2y')
-    print(f"INSERT INTO Creator (id_creator, nama, email, bidang_kreasi, deskripsi, tanggal_bergabung) VALUES ({i}, {sql_string(nama)}, {sql_string(email)}, {sql_string(bidang_kreasi)}, {sql_string(deskripsi)}, {sql_date(tanggal_bergabung)});")
+    if idx == len(creator_ids) - 1:
+        print(f"  ({i}, {sql_string(nama)}, {sql_string(email)}, {sql_string(bidang_kreasi)}, {sql_string(deskripsi)}, {sql_date(tanggal_bergabung)});")
+    print(f"  ({i}, {sql_string(nama)}, {sql_string(email)}, {sql_string(bidang_kreasi)}, {sql_string(deskripsi)}, {sql_date(tanggal_bergabung)}),")
 
+printf(f"INSERT INTO Tier (id_tier, id_creator, nama_tier, deskripsi, harga) VALUES ")
 nama_tier_options = ['Pemula', 'Pendukung', 'Loyalis', 'Sponsor', 'Patron Utama']
 generated_tiers_data = []
-for i in tier_ids:
+for idx, i in enumerate(tier_ids):
     id_creator = random.choice(creator_ids)
     nama_tier = f"{random.choice(nama_tier_options)} {fake.word().capitalize()}"
     deskripsi = fake.sentence(nb_words=10)
     harga = random.randint(1, 200) * 5000
     generated_tiers_data.append({'id_tier': i, 'harga': harga})
-    print(f"INSERT INTO Tier (id_tier, id_creator, nama_tier, deskripsi, harga) VALUES ({i}, {id_creator}, {sql_string(nama_tier)}, {sql_string(deskripsi)}, {harga});")
+    if idx == len(tier_ids):
+        print(f" ({i}, {id_creator}, {sql_string(nama_tier)}, {sql_string(deskripsi)}, {harga});")
+    print(f" ({i}, {id_creator}, {sql_string(nama_tier)}, {sql_string(deskripsi)}, {harga}),")
+
 
 jenis_konten_options = ['Teks', 'Video', 'Audio', 'Gambar']
 for i in konten_ids:
@@ -103,28 +115,36 @@ for i in konten_ids:
         kualitas_audio = random.choice(['128kbps', '256kbps', '320kbps', 'Lossless'])
         print(f"INSERT INTO Audio (id_konten, durasi, kualitas) VALUES ({i}, {sql_time(datetime.strptime(durasi_audio_str, '%H:%M:%S').time())}, {sql_string(kualitas_audio)});")
 
+printf(f"INSERT INTO Merchandise (id_merchandise, nama, harga, stok, deskripsi) VALUES")
 generated_merchandise_data = []
-for i in merchandise_ids:
+for idx, i in enumerate(merchandise_ids):
     nama_merch = f"{fake.word().capitalize()} {random.choice(['T-Shirt', 'Mug', 'Sticker Pack', 'Poster', 'Keychain'])}"
     harga_merch = random.randint(5, 50) * 10000
     stok = random.randint(0, 150)
     deskripsi_merch = fake.sentence(nb_words=8)
     generated_merchandise_data.append({'id_merchandise': i, 'harga': harga_merch})
-    print(f"INSERT INTO Merchandise (id_merchandise, nama, harga, stok, deskripsi) VALUES ({i}, {sql_string(nama_merch)}, {harga_merch}, {stok}, {sql_string(deskripsi_merch)});")
+    if idx == len(merchandise_ids) - 1:
+        print(f" ({i}, {sql_string(nama_merch)}, {harga_merch}, {stok}, {sql_string(deskripsi_merch)});")
+    print(f" ({i}, {sql_string(nama_merch)}, {harga_merch}, {stok}, {sql_string(deskripsi_merch)}),")
 
-for id_konten in konten_ids:
+printf(f"INSERT INTO Publikasi (id_publikasi, id_creator, id_konten) VALUES")
+for idx, id_konten in enumerate(konten_ids):
     if random.random() < 0.9:
         id_creator_publikasi = random.choice(creator_ids)
-        print(f"INSERT INTO Publikasi (id_publikasi, id_creator, id_konten) VALUES ({publikasi_counter}, {id_creator_publikasi}, {id_konten});")
+        if idx == len(konten_ids) - 1:
+            print(f" ({publikasi_counter}, {id_creator_publikasi}, {id_konten});")
+        print(f" ({publikasi_counter}, {id_creator_publikasi}, {id_konten}),")
+            
         publikasi_ids_map[id_konten] = publikasi_counter
         current_publikasi_ids.append(publikasi_counter)
         publikasi_counter += 1
 
+printf(f"INSERT INTO Gambar (id_gambar, id_konten, format, resolusi) VALUES")
 for id_konten_gambar in konten_ids:
     if random.random() < 0.8:
         format_gambar = random.choice(['.jpg', '.png', '.gif', '.webp'])
         resolusi_gambar = random.choice(['640x480', '1280x720', '1920x1080', '2560x1440'])
-        print(f"INSERT INTO Gambar (id_gambar, id_konten, format, resolusi) VALUES ({gambar_counter}, {id_konten_gambar}, {sql_string(format_gambar)}, {sql_string(resolusi_gambar)});")
+        print(f" ({gambar_counter}, {id_konten_gambar}, {sql_string(format_gambar)}, {sql_string(resolusi_gambar)});")
         gambar_ids_map[id_konten_gambar] = gambar_counter
         current_gambar_ids.append(gambar_counter)
         gambar_counter += 1
@@ -138,7 +158,7 @@ for i in special_content_ids:
     tgl_order = fake.date_between(start_date='-1y', end_date='-1m')
     tanggal_batas_revisi = tgl_order + timedelta(days=random.randint(14, 30))
     batas_waktu_pengerjaan = tgl_order + timedelta(days=random.randint(30, 90))
-    print(f"INSERT INTO Special_Content (id_spesial, id_supporter, id_creator, judul, deskripsi, harga_dasar, tanggal_batas_revisi, batas_waktu_pengerjaan) VALUES ({i}, {id_supporter_sc}, {id_creator_sc if id_creator_sc else 'NULL'}, {sql_string(judul_sc)}, {sql_string(deskripsi_sc)}, {harga_dasar_sc}, {sql_date(tanggal_batas_revisi)}, {sql_date(batas_waktu_pengerjaan)});")
+    print(f" ({i}, {id_supporter_sc}, {id_creator_sc if id_creator_sc else 'NULL'}, {sql_string(judul_sc)}, {sql_string(deskripsi_sc)}, {harga_dasar_sc}, {sql_date(tanggal_batas_revisi)}, {sql_date(batas_waktu_pengerjaan)});")
 
 status_langganan_options = ['Aktif', 'Berakhir', 'Dibatalkan']
 metode_pembayaran_options = ['Transfer Bank', 'Kartu Kredit', 'GoPay', 'OVO', 'Dana']
