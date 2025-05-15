@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS DRG;
 CREATE DATABASE DRG;
 USE DRG;
 
@@ -9,25 +10,18 @@ CREATE TABLE Supporter (
     tanggal_bergabung DATE
 );
 
-CREATE TABLE Struk_Langganan (
-    id_supporter INT NOT NULL,
-    id_tier INT NOT NULL,
-    tanggal_mulai DATE,
-    status VARCHAR(50),
-    metode_pembayaran VARCHAR(50),
-    jumlah INT NOT NULL,
-    tanggal_pembayaran_terakhir DATE,
-    CONSTRAINT fk_supporter FOREIGN KEY (id_supporter) REFERENCES Supporter(id_supporter)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-    CONSTRAINT fk_tier FOREIGN KEY (id_tier) REFERENCES tier(id_tier)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+CREATE TABLE Creator (
+    id_creator INT PRIMARY KEY,
+    nama VARCHAR(50),
+    email CHAR(50),
+    bidang_kreasi VARCHAR(50),
+    deskripsi VARCHAR(75),
+    tanggal_bergabung DATE
 );
 
 CREATE TABLE Tier (
     id_tier INT PRIMARY KEY,
-     id_tier INT NOT NULL,
+    id_creator INT NOT NULL,
     nama_tier VARCHAR(75),
     deskripsi VARCHAR(75),
     harga INT NOT NULL,
@@ -36,15 +30,24 @@ CREATE TABLE Tier (
         ON UPDATE CASCADE
 );
 
-CREATE TABLE Creator (
-    id_creator INT PRIMARY KEY,
-    nama VARCHAR(50),
-    email CHAR(50),
-    bidang_kreasi VARCHAR(50),
-
-    deskripsi VARCHAR(75),
-    tanggal_bergabung DATE
+CREATE TABLE Struk_Langganan (
+    id_supporter INT NOT NULL,
+    id_tier INT NOT NULL,
+    tanggal_mulai DATE,
+    status VARCHAR(50),
+    metode_pembayaran VARCHAR(50),
+    jumlah INT NOT NULL,
+    tanggal_pembayaran_terakhir DATE,
+    CONSTRAINT FOREIGN KEY (id_supporter) REFERENCES Supporter(id_supporter)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (id_tier) REFERENCES tier(id_tier)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
+
+
+
 
 CREATE TABLE Special_Content (
     id_supporter INT PRIMARY KEY,
