@@ -1,17 +1,20 @@
 # Database Kelompok 4
 
-## How to use
+## How to use the script
 ### Faker
+
+### WARNING: DO NOT OVERWRITE DRG.sql AS IT IS STANDARD DATA
+
 #### Windows
-Generate the faked data using
+Generate the fake data using
 ```
-python faker.py < {filename}
+python seeder.py > {output_name}.sql
 ```
 
 #### Linux
-Generate the faked data using
+Generate the fake data using
 ```
-python3 faker.py < {filename}
+python3 seeder.py > {output_name}.sql
 ```
 
 then, append the generated commands into your sql
