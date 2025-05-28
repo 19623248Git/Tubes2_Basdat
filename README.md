@@ -28,3 +28,11 @@ OR, inside mariadb
 ```
 SOURCE {filename}.sql
 ```
+
+
+### CONTRIBUTORS:
+1. Muhammad Raihan Nazhim Oktana / 13523021
+2. Nathan Jovial Hartono / 13523032
+3. Muhammad Rayhan Farrukh / 13523035
+4. Abrar Abhirama Widyadhana / 13523038
+5. Aloisius Adrian Stevan Gunawan / 13523054
